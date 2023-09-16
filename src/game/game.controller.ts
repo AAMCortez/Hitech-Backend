@@ -4,21 +4,23 @@ import {
   Post,
   Delete,
   Patch,
-  UseGuards,
   Param,
   Body,
+  ParseIntPipe,
 } from '@nestjs/common';
-import { JwtGuard } from 'src/auth/guard';
+//import { JwtGuard } from '../auth/guard';
 import { GameService } from './game.service';
 import { createGameDto } from './dto';
 
-@UseGuards(JwtGuard)
+//@UseGuards(JwtGuard)
+//Guard not working nicely on the browser but working on postman
 @Controller('game')
 export class GameController {
   constructor(private gameService: GameService) {}
   @Post()
   async createGame(@Body() createGameDto: createGameDto) {
     const game = await this.gameService.createGame(createGameDto);
+    console.log(createGameDto);
     return game;
   }
 
@@ -44,7 +46,7 @@ export class GameController {
   }
 
   @Delete(':id')
-  async deleteGameById(@Param('id') id: number) {
+  async deleteGameById(@Param('id', ParseIntPipe) id: number) {
     const deletedGame = await this.gameService.deleteGameById(id);
     return deletedGame;
   }

@@ -7,17 +7,16 @@ export class GameService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async createGame(createGameDto: createGameDto) {
-    // Destructure properties from DTO
     const { title, value, description, bets } = createGameDto;
 
-    // Create a new game using Prisma
+    // Create a new game
     const game = await this.prismaService.game.create({
       data: {
         title,
         value,
         description,
         bets: {
-          connect: bets?.map((betId) => ({ id: betId })), // Connect bets if provided
+          connect: bets?.map((betId) => ({ id: betId })),
         },
       },
     });
@@ -26,13 +25,13 @@ export class GameService {
   }
 
   async getGames() {
-    // Retrieve all games using Prisma
+    // Retrieve all games
     const games = await this.prismaService.game.findMany();
     return games;
   }
 
   async getGameById(id: number) {
-    // Retrieve a game by its ID using Prisma
+    // Retrieve a game by its Id
     const game = await this.prismaService.game.findUnique({
       where: { id },
     });
@@ -45,10 +44,9 @@ export class GameService {
   }
 
   async editGameById(id: number, createGameDto: createGameDto) {
-    // Destructure properties from DTO
     const { title, value, description, bets } = createGameDto;
 
-    // Update the game by its ID using Prisma
+    // Update the game by its Id
     const updatedGame = await this.prismaService.game.update({
       where: { id },
       data: {
@@ -69,7 +67,7 @@ export class GameService {
   }
 
   async deleteGameById(id: number) {
-    // Delete a game by its ID using Prisma
+    // Delete a game by its Id
     const deletedGame = await this.prismaService.game.delete({
       where: { id },
     });
